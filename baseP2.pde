@@ -15,6 +15,11 @@ int ms=0, me=0; // milli seconds start and end for timing
 pt A, B;
 int aX, aY, bX, bY; //coordinates of arrow points
 
+//BOOLEANS FOR CHECKING ARROW
+boolean abInsidePolygon = false;
+boolean bool1, bool2, bool3, bool4, bool5, bool6;
+boolean noRedEdges = false;
+
 //**************************** initialization ****************************
 void setup()               // executed once at the begining 
   {
@@ -35,26 +40,69 @@ void draw()      // executed at each frame
     background(white); // clear screen and paints white background
     pen(black,3); fill(yellow); P.drawCurve(); P.IDs(); // shows polyloop with vertex labels
     stroke(red); pt G=P.Centroid(); show(G,10); // shows centroid
-    
-    //DRAW ARROW
-    // defines line style with (5) and color (green) and draws starting arrow from A to B
-    if(arrowPlaced) {
-      color colorA = get(aX, aY);
-      color colorB = get(bX, bY);
-      if((colorA != white) && (colorB != white)) {
-        pen(green,5); arrow(A,B);
-      } else {
-        pen(red, 5); arrow(A,B);
-      }
-      //vec AB = vec(A, B);
-      //logic to check vector against all edges
-    }  
+         
+    //************************ ARROW STUFF **********************************      
+    //If A has been placed but B hasn't, draw B where mouse is hovering
     if(arrowStarted) {
       B=P(mouseX, mouseY);
       pen(green,5); arrow(A,B);
     } 
+    //ONCE THE ARROW IS PLACED...
+    if(arrowPlaced) {
+      //...CHECK IF POINTS A AND B ARE BOTH INSIDE POLYGON
+      color colorA = get(aX, aY);
+      color colorB = get(bX, bY);
+      if((colorA != white) && (colorB != white)) {
+        abInsidePolygon = true;
+      } else {
+        abInsidePolygon = false;
+      }
+      //...CHECK IF ARROW CROSSES ANY EDGES
+      for(int i=0; i<P.nv; i++) {
+        pt C = P.G[i];
+        pt D = P.G[i+1];
+        vec ab = V(A, B);
+        vec ad = V(A, D);
+        vec ac = V(A, C);
+        vec cd = V(C, D); 
+        vec ca = V(C, A);
+        vec cb = V(C, B);
+        bool1 = (det(ab, ad)>0) && (det(ab, ac)<0);
+        bool2 = (det(ab, ad)<0) && (det(ab, ac)>0);
+        bool3 = (det(cd, ca)>0) && (det(cd, cb)<0);
+        bool4 = (det(cd, ca)<0) && (det(cd, cb)>0);
+        bool5 = bool1 || bool2; 
+        bool6 = bool3 || bool4; 
+        if (bool5 && bool6) {
+          i=P.nv;
+          noRedEdges = false;
+        } else {
+          noRedEdges = true;
+        }
+      }
+      //...THEN DRAW ARROW RED IF IT'S A BAD ARROW
+      if(abInsidePolygon && noRedEdges) {
+        pen(green,5); arrow(A,B);
+      } else {
+        pen(red, 5); arrow(A,B);
+      }
+      //...HIGHLIGHT EDGES THAT ARROW VECTOR CROSSES
+      for(int i=0; i<P.nv; i++) {
+        pt C = P.G[i];
+        pt D = P.G[i+1];
+        vec CD = V(C, D);
+        vec CA = V(C, A);
+        vec AB = V(A, B);
+        float t = -det(CD, CA)/det(CD, AB);
+        if (t < 0) {
+          println("AB Intersects with the edge between vector " + i + " and " + (i+1));
+        }  
+      }  
+      println("new line");
+      
+    }  
 
-
+      
   if(recordingPDF) endRecordingPDF();  // end saving a .pdf file with the image of the canvas
 
   fill(black); displayHeader(); // displays header
