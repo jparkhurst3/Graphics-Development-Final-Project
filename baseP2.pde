@@ -90,12 +90,19 @@ void draw()      // executed at each frame
       for(int i=0; i<P.nv; i++) {
         pt C = P.G[i];
         pt D = P.G[i+1];
-        vec CD = V(C, D);
-        vec CA = V(C, A);
-        vec AB = V(A, B);
-        float t = -det(CD, CA)/det(CD, AB);
-        if (t < 0) {
+        float topHalfX = (A.x * B.y - A.y * B.x)*(C.x - D.x) - (A.x - B.x)*(C.x * D.y - C.y * D.x);
+        float bottomHalf = (A.x - B.x)*(C.y -D.y) - (A.y - B.y)*(C.x - D.x);
+        float topHalfY = (A.x * B.y - A.y * B.x)*(C.y - D.y) - (A.y - B.y)*(C.x * D.y - C.y * D.x);
+        if (bottomHalf == 0)
+        {
+          println("No intersection at points: " + i + ", " + (i+1));
+        } else { 
+          pen(blue, 5);
           println("AB Intersects with the edge between vector " + i + " and " + (i+1));
+          float interX = topHalfX/bottomHalf;
+          float interY = topHalfY/bottomHalf;
+          println("At point: " + interX + ", " + interY);
+          ellipse(interX, interY, 5, 5);
         }  
       }  
       println("new line");
