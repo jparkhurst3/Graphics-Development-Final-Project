@@ -112,6 +112,8 @@ pt ScreenCenter() {return P(width/2,height/2);}                                 
 // measure 
 float d(pt P, pt Q) {return sqrt(d2(P,Q));  };                                                       // ||AB|| (Distance)
 float d2(pt P, pt Q) {return sq(Q.x-P.x)+sq(Q.y-P.y); };                                             // AB*AB (Distance squared)
+int intd(pt P, pt Q) { return (int)sqrt(intd2(P,Q)); };
+int intd2(pt P, pt Q) { return (int)sq((int)Q.x - (int)P.x) + (int)sq((int)sq((int)Q.y - (int)P.y)); };
 boolean isSame(pt A, pt B) {return (A.x==B.x)&&(A.y==B.y) ;}                                         // A==B
 boolean isSame(pt A, pt B, float e) {return d2(A,B)<sq(e);}                                          // |AB|<e
 

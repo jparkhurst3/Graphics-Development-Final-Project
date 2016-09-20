@@ -4,7 +4,7 @@ import processing.pdf.*;    // to save screen shots as PDFs, does not always wor
 
 //**************************** global variables ****************************
 pts P = new pts(); // class containing array of points, used to standardize GUI
-
+pts inters = new pts();
 float t=0, f=0;
 boolean animate=true, fill=false, timing=false;
 boolean lerp=true, slerp=true, spiral=true; // toggles to display vector interpoations
@@ -27,9 +27,13 @@ void setup()               // executed once at the begining
   frameRate(30);             // render 30 frames per second
   smooth();                  // turn on antialiasing
   myFace = loadImage("data/pic.jpg");  // load image from file pic.jpg in folder data *** TODO replace that file with your pic of your own face
-  P.declare(); // declares all points in P. MUST BE DONE BEFORE ADDING POINTS 
+  P.declare();// declares all points in P. MUST BE DONE BEFORE ADDING POINTS
+  inters.declare();
+  inters.empty();
+  println("Inters.nv = " + inters.nv);
   // P.resetOnCircle(4); // sets P to have 4 points and places them in a circle on the canvas <--DELETE??
-  P.loadPts("data/pts");  // loads points form file saved with this program
+  P.loadPts("data/pts");
+  // loads points form file saved with this program
   } // end of setup
 
 //**************************** display current frame ****************************
@@ -39,7 +43,7 @@ void draw()      // executed at each frame
   
     background(white); // clear screen and paints white background
     pen(black,3); fill(yellow); P.drawCurve(); P.IDs(); // shows polyloop with vertex labels
-    stroke(red); pt G=P.Centroid(); show(G,10); // shows centroid
+    //stroke(red); pt G=P.Centroid(); show(G,10); // shows centroid
          
     //************************ ARROW STUFF **********************************      
     //If A has been placed but B hasn't, draw B where mouse is hovering
@@ -49,6 +53,7 @@ void draw()      // executed at each frame
     } 
     //ONCE THE ARROW IS PLACED...
     if(arrowPlaced) {
+      inters = new pts();
       //...CHECK IF POINTS A AND B ARE BOTH INSIDE POLYGON
       color colorA = get(aX, aY);
       color colorB = get(bX, bY);
@@ -86,7 +91,10 @@ void draw()      // executed at each frame
       } else {
         pen(red, 5); arrow(A,B);
       }
-      //...HIGHLIGHT EDGES THAT ARROW VECTOR CROSSES
+      
+      pt t1;
+      pt t2;
+      //...MARK INTERSECTION OF ARROW AND EDGES WITH BLUE DOTS
       for(int i=0; i<P.nv; i++) {
         pt C = P.G[i];
         pt D = P.G[i+1];
@@ -96,15 +104,68 @@ void draw()      // executed at each frame
         if (bottomHalf == 0)
         {
           println("No intersection at points: " + i + ", " + (i+1));
-        } else { 
-          pen(blue, 5);
-          println("AB Intersects with the edge between vector " + i + " and " + (i+1));
+        } else {
           float interX = topHalfX/bottomHalf;
           float interY = topHalfY/bottomHalf;
-          println("At point: " + interX + ", " + interY);
-          ellipse(interX, interY, 5, 5);
-        }  
-      }  
+          pt intersection = P(interX, interY);
+          
+          if(get((int)interX, (int)interY) == black)
+          {
+            
+            if (d(A,intersection) < d(B,intersection))
+            {
+              if (d(A,t1) < d(A,t2))
+              {
+                if(d(A,intersection) < d(A,t1))
+                {
+                  t1 = intersection;
+                }
+              } else {
+                if(d(A,intersection) < d(A,t2))
+                {
+                  t2 = intersection;
+                }
+              }
+            } else {
+              if (d(B,t1) < d(B,t2))
+              {
+                if(d(B,intersection) < d(B,t1))
+                {
+                  t1 = intersection;
+                }
+              } else {
+                if(d(B,intersection) < d(B,t2))
+                {
+                  t2 = intersection;
+                }
+              }
+            }
+            pen(blue, 5);
+            println("AB Intersects with the edge between vector " + i + " and " + (i+1));
+            println("At point: " + interX + ", " + interY);
+            ellipse((int)interX, (int)interY, 5, 5); 
+            
+          //if (i + 1 == P.nv)
+          //{
+          //  println("adding pt to polygon");
+          //  P.addPt(t1);
+          //  P.addPt(t2);
+          //  arrowStarted = false;
+          //  arrowPlaced = false;
+          //}
+          }
+        }
+        
+        
+            if(!isSame(t1,P(0,0)) && !isSame(t2,P(800,800)))
+            {
+            pen(green, 5);
+            ellipse((int)t1.x, (int)t1.y, 5, 5);
+            ellipse((int)t2.x, (int)t2.y, 5, 5);
+            }
+      }
+      
+       
       println("new line");
       
     }  

@@ -63,7 +63,7 @@ void displayHeader()  // Displays title and authors face on screen
     {
     scribeHeader(title,0);       scribeHeaderRight(name); 
     scribeHeader(subtitle,1);
-    image(myFace, width-myFace.width/2,25,myFace.width/2,myFace.height/2); 
+    image(myFace, width-myFace.width/7,25,myFace.width/7,myFace.height/7); 
     }
 void displayFooter()  // Displays help text at the bottom
     {
