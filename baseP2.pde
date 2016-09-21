@@ -49,6 +49,7 @@ void draw()      // executed at each frame
     //If A has been placed but B hasn't, draw B where mouse is hovering
     if(arrowStarted) {
       B=P(mouseX, mouseY);
+      
       pen(green,5); arrow(A,B);
     } 
     //ONCE THE ARROW IS PLACED...
@@ -87,15 +88,11 @@ void draw()      // executed at each frame
       }
       //...THEN DRAW ARROW RED IF IT'S A BAD ARROW
       if(abInsidePolygon && noRedEdges) {
+        
+        pt t1 = P(0,400);
+        pt t2 = P(800,400); 
         pen(green,5); arrow(A,B);
-      } else {
-        pen(red, 5); arrow(A,B);
-      }
-      
-      pt t1;
-      pt t2;
-      //...MARK INTERSECTION OF ARROW AND EDGES WITH BLUE DOTS
-      for(int i=0; i<P.nv; i++) {
+        for(int i=0; i<P.nv; i++) {
         pt C = P.G[i];
         pt D = P.G[i+1];
         float topHalfX = (A.x * B.y - A.y * B.x)*(C.x - D.x) - (A.x - B.x)*(C.x * D.y - C.y * D.x);
@@ -109,66 +106,55 @@ void draw()      // executed at each frame
           float interY = topHalfY/bottomHalf;
           pt intersection = P(interX, interY);
           
+          
           if(get((int)interX, (int)interY) == black)
-          {
+          { 
             
+            println("AB Intersects with the edge between vector " + i + " and " + (i+1));
+            println("At point: " + interX + ", " + interY);
+            println("finding closest t");
             if (d(A,intersection) < d(B,intersection))
             {
-              if (d(A,t1) < d(A,t2))
-              {
-                if(d(A,intersection) < d(A,t1))
-                {
-                  t1 = intersection;
-                }
-              } else {
-                if(d(A,intersection) < d(A,t2))
-                {
-                  t2 = intersection;
-                }
+              if(d(A,intersection) < d(A,t1)) {
+                t1 = intersection;
               }
             } else {
-              if (d(B,t1) < d(B,t2))
-              {
-                if(d(B,intersection) < d(B,t1))
-                {
-                  t1 = intersection;
-                }
-              } else {
-                if(d(B,intersection) < d(B,t2))
-                {
-                  t2 = intersection;
-                }
+              if (d(B,intersection) < d(B,t2)) {
+                t2 = intersection;
               }
             }
             pen(blue, 5);
-            println("AB Intersects with the edge between vector " + i + " and " + (i+1));
-            println("At point: " + interX + ", " + interY);
-            ellipse((int)interX, (int)interY, 5, 5); 
+            ellipse((int)interX, (int)interY, 5, 5);
             
-          //if (i + 1 == P.nv)
-          //{
-          //  println("adding pt to polygon");
-          //  P.addPt(t1);
-          //  P.addPt(t2);
-          //  arrowStarted = false;
-          //  arrowPlaced = false;
-          //}
           }
         }
-        
-        
-            if(!isSame(t1,P(0,0)) && !isSame(t2,P(800,800)))
-            {
+      }
+      if(get((int)t1.x,(int)t1.y) != white && get((int)t2.x,(int)t2.y) != white)
+        {
             pen(green, 5);
             ellipse((int)t1.x, (int)t1.y, 5, 5);
             ellipse((int)t2.x, (int)t2.y, 5, 5);
-            }
+            println("adding x: " + t1.x + " y: " + t1.y);
+            println("adding x: " + t2.x + " y: " + t2.y);
+            P.addPt(t1);
+            P.addPt(t2);
+            arrowStarted = false;
+            arrowPlaced = false;
+            A = P(mouseX, mouseY);
+        }
+      } else {
+        pen(red, 5); arrow(A,B);
       }
+      
+      //...MARK INTERSECTION OF ARROW AND EDGES WITH BLUE DOTS
+       //<>//
       
        
       println("new line");
       
-    }  
+    }
+    
+        
 
       
   if(recordingPDF) endRecordingPDF();  // end saving a .pdf file with the image of the canvas
