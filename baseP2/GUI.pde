@@ -149,8 +149,8 @@ void keyPressed()  // executed each time a key is pressed: sets the Boolean "key
 
 boolean arrowStarted = false;
 boolean arrowPlaced = false;
-void mousePressed() { //<>//
-  if(state1)
+void mousePressed() { //<>// //<>//
+  if(state1) {
     if(!arrowStarted) {
       A=P(mouseX, mouseY);
       println();
@@ -170,6 +170,7 @@ void mousePressed() { //<>//
       arrowPlaced = true;
       arrowStarted = false;
     }  
+  }
 }
   }
 
