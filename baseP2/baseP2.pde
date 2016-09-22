@@ -23,6 +23,7 @@ ArrayList<pts> arrayOfPs = new ArrayList<pts>();
 boolean state1, state2;
 boolean guessing;
 int guessPiece;
+int numberOfGuesses;
 
 //**************************** initialization ****************************
 void setup()               // executed once at the begining 
@@ -36,7 +37,7 @@ void setup()               // executed once at the begining
   P.declare();// declares all points in P. MUST BE DONE BEFORE ADDING POINTS
   P.loadPts("data/pts"); // loads points form file saved with this program
   currentP.declare();
-  
+  numberOfGuesses = 0;
   //To start, currentP = P
   for(int i=0; i<P.nv; i++) {
     currentP.addPt(P.G[i]);  
@@ -138,7 +139,7 @@ void draw()      // executed at each frame
     } //end of State1  
     
     if(state2) {
-        int numberOfGuesses = 0;
+        background(white);
         drawPolygon2();
         boolean lose = false;
           //println("Guessing piece: " + i);
@@ -149,8 +150,8 @@ void draw()      // executed at each frame
             pen(black, 3);
             fill(red);
             arrayOfPs.get(guessPiece).drawCurve();
-            //When clicked, get the mouse's X and Y
-            if (mousePressed) //<>//
+            //When clicked, get the mouse's X and Y //<>//
+            if (mousePressed)
             {
               println("Mouse click detected.");
               int x = mouseX;
