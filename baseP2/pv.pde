@@ -11,6 +11,8 @@
 class pt 
   { 
   float x=0,y=0; 
+  int edge1; //ADDED BY JO
+  int edge2; //ADDED BY JO
   
   // CREATE
   pt () {}

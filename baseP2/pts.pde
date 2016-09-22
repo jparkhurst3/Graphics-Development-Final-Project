@@ -11,6 +11,7 @@ class pts
   int iv = 0;                              // insertion index 
   int maxnv = 100*2*2*2*2*2*2*2*2;         //  max number of vertices
   Boolean loop=true;                       // is a closed loop
+  ArrayList<vec> edges = new ArrayList<vec>(); //array of edges from OG polygon that the pieces touches
 
   pt[] G = new pt [maxnv];                 // geometry table (vertices)
 

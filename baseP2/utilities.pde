@@ -63,10 +63,15 @@ void displayHeader()  // Displays title and authors face on screen
     {
     scribeHeader(title,0);       scribeHeaderRight(name); 
     scribeHeader(subtitle,1);
-    image(myFace, width-myFace.width/7,25,myFace.width/7,myFace.height/7); 
+    image(myFace, width-myFace.width/3,25,myFace.width/3,myFace.height/3); 
     }
 void displayFooter()  // Displays help text at the bottom
     {
-    scribeFooter(guide,1); 
-    scribeFooter(menu,0); 
+      if(state1) {
+        scribeFooter(player1Instructions,1);
+      }   
+      if(state2) {
+        scribeFooter(player2Instructions,1);
+        scribeFooter(guesses, 0);
+      }  
     }
