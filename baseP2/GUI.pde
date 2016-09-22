@@ -34,7 +34,10 @@ void keyPressed()  // executed each time a key is pressed: sets the Boolean "key
     if(key=='a') ; 
     if(key=='b') ; 
     if(key=='c') P.resetOnCircle(P.nv);
-    if(key=='d') ; 
+    if(key=='d') {
+      state1 = false;
+      state2 = true;
+    }  
     if(key=='e') ;
     if(key=='f') ;
     if(key=='g') ; 
@@ -61,7 +64,10 @@ void keyPressed()  // executed each time a key is pressed: sets the Boolean "key
     if(key=='A') ;
     if(key=='B') ; 
     if(key=='C') ; 
-    if(key=='D') ;  
+    if(key=='D')  {
+      state1 = false;
+      state2 = true;
+    }    
     if(key=='E') ;
     if(key=='F') ;
     if(key=='G') ; 
@@ -185,9 +191,16 @@ void mouseWheel(MouseEvent event) { // reads mouse wheel and uses to zoom
   }
 
 //**************************** text for name, title and help  ****************************
-String title ="Split Polygon Puzzle",            name ="Student: First LAST",
-       subtitle = "  base code for P2 for Jarek Rossignac's CS3451 class in the Fall 2016",
+String title ="Split Polygon Puzzle",            name ="Peter Lyons & Joanna Parkhurst",
+       subtitle = "CS 3451 - Jarek Rossignac - Fall 2016",
        
        menu="?:(show/hide) help, ~/!/@:snap pdf/jpg/fif, `:(start/stop) recording, S/L:save/load, Q:quit",
-       guide="click&drag:edit, d&click:delete, i&click&drag:insrt, s&click&drag:split"; // help info
+       guide="click&drag:edit, d&click:delete, i&click&drag:insrt, s&click&drag:split", // help info
+       player1Instructions = "Click & Drag an arrow to split the polygon into smaller pieces. Press 'd' when done.",
+       player2Instructions = "For each piece show, click on an edge to guess it's place. You have three guesses.";
+
+int guessesInt = 3;
+String guessesString = str(guessesInt);
+String guesses = "Guesses Left: " + guessesString;
+       
        
