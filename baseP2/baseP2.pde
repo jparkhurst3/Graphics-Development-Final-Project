@@ -21,6 +21,8 @@ int beforeT1, beforeT2;
 ArrayList<pts> arrayOfPs = new ArrayList<pts>();
 
 boolean state1, state2;
+boolean guessing;
+int guessPiece;
 
 //**************************** initialization ****************************
 void setup()               // executed once at the begining 
@@ -39,22 +41,21 @@ void setup()               // executed once at the begining
   for(int i=0; i<P.nv; i++) {
     currentP.addPt(P.G[i]);  
   }  
-  
+  guessPiece = 2;
   arrayOfPs.add(P);
   arrayOfPs.add(currentP);
-  
   state1=true;
   state2=false;
+  guessing = false;
 } // end of setup
 
 //**************************** display current frame ****************************
 void draw()      // executed at each frame
   {
   if(recordingPDF) startRecordingPDF();
-  
-    background(white);
     
     if(state1) {
+      background(white);
       drawPolygon1();
       if(arrowStarted) {  //If A has been placed but B hasn't, draw B where mouse is hovering
         B=P(mouseX, mouseY);
@@ -137,21 +138,60 @@ void draw()      // executed at each frame
     } //end of State1  
     
     if(state2) {
-      drawPolygon2(); 
-      //Draw current piece that guessing within window
-      //When clicked, get the mouse's X and Y
-      //Add 500 to both X and Y
-      //Get the color from that pixel
-      //Use the formula to calculate which piece it is (color/10 = index in arrayOfPs)
-      //If index in arrayOfPs = piece that guessing
-          //Move on to guessing next piece
-          //If all pieces guessed = WIN
+        int numberOfGuesses = 0;
+        drawPolygon2();
+        boolean lose = false;
+          //println("Guessing piece: " + i);
+          boolean correct = false;
+          if(correct == false)
+          {
+            //Draw current piece that guessing within window
+            pen(black, 3);
+            fill(red);
+            arrayOfPs.get(guessPiece).drawCurve();
+            //When clicked, get the mouse's X and Y
+            if (mousePressed) //<>//
+            {
+              println("Mouse click detected.");
+              int x = mouseX;
+              int y = mouseY;
+              //Add 500 to both X and Y
+              int guessX = x + 500;
+              int guessY = y + 500;
+              //Get the color from that pixel
+              //Use the formula to calculate which piece it is (color/10 = index in arrayOfPs)
+              //If index in arrayOfPs = piece that guessing
+              //Move on to guessing next piece
+              if (get(guessX, guessY)/10 == guessPiece)
+              {
+                correct = true;
+                guessPiece++;
+                println("YAY!");
+                numberOfGuesses = 0;
+                guessing = true;
+                println("Next piece!");
+              } else {
+                println("WRONG");
+                background(red);
+                numberOfGuesses++;
+                guessing = true;
+                if(numberOfGuesses >= 3)
+                {
+                  background(red);
+                  println("YOU LOSE!");
+                  lose = true;
+                  guessing = true;
+                }
+              }
+            }
+        }
+        //If all pieces guessed = WIN 
       //If index in arrayOfPs != piece that guessing 
           //Decrement # of guesses
           //If guesses are out = LOSE
       
     }//end of State2  
-       //<>//
+      
     fill(black); displayHeader(); // displays header
 
     //...FROM ORIGINAL PROJECT CODE <--DELETE?    

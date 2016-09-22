@@ -149,7 +149,8 @@ void keyPressed()  // executed each time a key is pressed: sets the Boolean "key
 
 boolean arrowStarted = false;
 boolean arrowPlaced = false;
-void mousePressed() {
+void mousePressed() { //<>//
+  if(state1)
     if(!arrowStarted) {
       A=P(mouseX, mouseY);
       println();
@@ -169,6 +170,7 @@ void mousePressed() {
       arrowPlaced = true;
       arrowStarted = false;
     }  
+}
   }
 
 //void mouseDragged() // executed when the mouse is dragged (while mouse buttom pressed)
@@ -189,7 +191,6 @@ void mouseWheel(MouseEvent event) { // reads mouse wheel and uses to zoom
   P.scaleAllAroundCentroid(s/100);
   change=true;
   }
-
 //**************************** text for name, title and help  ****************************
 String title ="Split Polygon Puzzle",            name ="Peter Lyons & Joanna Parkhurst",
        subtitle = "CS 3451 - Jarek Rossignac - Fall 2016",
